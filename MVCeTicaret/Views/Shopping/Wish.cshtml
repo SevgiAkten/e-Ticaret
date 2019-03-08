@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MVCeTicaret.Models.Wishlist>
+@{
+	ViewBag.Title = "Wish";
+}
+
+<h2>İstek Listeniz</h2>
+
+<table class="table table-hover" style="text-align:center">
+	<thead>
+		<tr>
+			<th>Listeden Çıkar</th>
+			<th>Görsel</th>
+			<th>Adı</th>
+			<th>Fiyatı</th>
+			<th>Stok Miktarı</th>
+			<th>Sepete Ekle</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			foreach (var item in Model)
+			{
+				<tr>
+					<td><a href="@Url.Action("RemoveFromWishList","Shopping", new {id=item.WishlistID })" style="font-size:25pt;"><span class="glyphicon glyphicon-trash" style="width:75px;height:75px;color:red"></span></a></td>
+					<td><div class="thumbnail"><img src="@Url.Content(item.Product.ImageUrl)" alt="@Url.Content(item.Product.AltText)" style="width:100px;height:130px;" /></div></td>
+					<td><p class="lead">@item.Product.Name</p></td>
+					<td><p class="lead">@string.Format("{0:C2}", item.Product.UnitPrice)</p></td>
+					<td><p class="lead">@item.Product.UnitsInStock @item.Product.QuantityPerUnit</p></td>
+
+					<td>
+						@{
+							if (item.Product.UnitsInStock == 0)
+							{
+								<a disabled style="font-size:25pt;"><span class="glyphicon glyphicon-shopping-cart" style="color:lightgray;"></span></a>
+							}
+							else
+							{
+								<a href="@Url.Action("AddToCartFromWishList","Shopping", new { id=item.WishlistID})"><span class="glyphicon glyphicon-shopping-cart" style="color:forestgreen;font-size:25pt;"></span></a>
+							}
+						}
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+

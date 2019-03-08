@@ -1,0 +1,75 @@
+﻿@model IEnumerable<MVCeTicaret.Models.OrderDetail>
+
+@{
+	ViewBag.Title = "Cart";
+}
+
+<h2>Sepetiniz</h2>
+
+<table class="table table-hover" style="text-align:center">
+	<thead>
+		<tr>
+			<th>Sepetten Çıkar</th>
+			<th>Ürün Görseli</th>
+			<th>Ürün Adı</th>
+			<th>Ürün Fiyatı</th>
+			<th>Ürün Miktarı</th>
+			<th>Miktar Güncelle</th>
+			<th>İstek Listesine Ekle</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			decimal toplamTutar = 0;
+
+			foreach (var item in Model)
+			{
+				toplamTutar += item.TotalAmount;
+				<tr>
+					<td><a href="@Url.Action("RemoveFromCart","Shopping",new { id=item.OrderDetailID})" style="font-size:25pt;"><span class="glyphicon glyphicon-trash" style="width:75px;height:75px;color:red"></span></a></td>
+					<td><div class="thumbnail"><img src="@Url.Content(item.Product.ImageUrl)" alt="@Url.Content(item.Product.AltText)" style="width:100px;height:130px;" /></div></td>
+					<td><p class="lead">@item.Product.Name</p></td>
+					<td><p class="lead">@string.Format("{0:C2}", @item.Product.UnitPrice)</p></td>
+					<td><p class="lead">@item.Quantity @item.Product.QuantityPerUnit</p></td>
+					<td>
+						@using (Html.BeginForm("UpdateQuantity", "Shopping", new { id = item.OrderDetailID }, FormMethod.Post))
+						{
+							<input type="number" value="@item.Quantity" min="1" max="@item.Product.UnitsInStock" name="quantity" />
+							@*<input type="submit" style="color:green;" class="glyphicon glyphicon-check" />*@
+							<button type="submit">
+								<span style="color:green;" class="glyphicon glyphicon-ok"></span>
+							</button>
+						}
+					</td>
+					<td><a href="@Url.Action("AddToWishListFromCart","Shopping",new { id=item.OrderDetailID})"><span class="glyphicon glyphicon-heart" style="color:cornflowerblue;font-size:25pt;"></span></a></td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
+<hr />
+
+@{
+	if (Model.ToList().Count == 0)
+	{
+		<span class="lead">
+			Sepetiniz Boş...
+		</span>
+	}
+	else
+	{
+		<span class="lead">
+			<p>
+				Ödenmesi gereken toplam tutar = @string.Format("{0:C2}", toplamTutar)
+			</p>
+		</span>
+
+		@Html.ActionLink("SİPARİŞİ TAMAMLA", "GoToPayment", "Shopping", null, new { @class = "btn btn-success", @style = "float:right" })
+
+	}
+}
+
+
+
+

@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - My ASP.NET Application</title>
+	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+	<link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="~/Scripts/modernizr-2.6.2.js"></script>
+	<style>
+		#myBtn {
+			display: none; /* Hidden by default */
+			position: fixed; /* Fixed/sticky position */
+			bottom: 20px; /* Place the button at the bottom of the page */
+			right: 30px; /* Place the button 30px from the right */
+			z-index: 99; /* Make sure it does not overlap */
+			border: none; /* Remove borders */
+			outline: none; /* Remove outline */
+			background-color: firebrick; /* Set a background color */
+			color: white; /* Text color */
+			cursor: pointer; /* Add a mouse pointer on hover */
+			padding: 15px; /* Some padding */
+			border-radius: 10px; /* Rounded corners */
+			font-size: 18px; /* Increase font size */
+		}
+
+			#myBtn:hover {
+				background-color: #555; /* Add a dark-grey background on hover */
+			}
+	</style>
+	<script>
+		// When the user scrolls down 20px from the top of the document, show the button
+		window.onscroll = function () { scrollFunction() };
+
+		function scrollFunction() {
+			if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+				document.getElementById("myBtn").style.display = "block";
+			} else {
+				document.getElementById("myBtn").style.display = "none";
+			}
+		}
+		// When the user clicks on the button, scroll to the top of the document
+		function topFunction() {
+			document.body.scrollTop = 0; // For Safari
+			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+		}
+	</script>
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top" style="background-color:orange;">
+		<div class="container">
+
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle " data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				@Html.ActionLink("Moda Çanta Sevgi", "Index", "Home", new { area = "" }, new { @class = "navbar-brand ", @style = "color:white;" })
+				@Html.ActionLink("Kadın", "Product", "Product", new { area = "", id = 1 }, new { @class = "navbar-brand ", @style = "color:white;" })
+				@Html.ActionLink("Laptop", "Product", "Product", new { area = "", id = 2 }, new { @class = "navbar-brand ", @style = "color:white;" })
+				@Html.ActionLink("Spor", "Product", "Product", new { area = "", id = 3 }, new { @class = "navbar-brand ", @style = "color:white;" })
+				@*@Html.ActionLink("Sizin İçin Seçtiklerimiz", "Index", "Home", new { area = "" }, new { @class = "navbar-brand ", @style = "color:white;" })*@
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					@{
+						if (Session["OnlineKullanici"] == null)
+						{
+
+							@Html.ActionLink("Üye Ol", "Register", "Login", new { area = "" }, new { @class = " nav navbar-right navbar-brand", @style = "color:white;" })
+							@Html.ActionLink("Giriş Yap", "Login", "Login", new { area = "" }, new { @class = " nav navbar-brand", @style = "color:white;" })
+						}
+						else
+						{
+							string ad = Session["OnlineKullanici"].ToString();
+							@Html.ActionLink("Çıkış Yap", "Logout", "Login", new { area = "" }, new { @class = "nav  navbar-right navbar-brand", @style = "color:white;" })
+							@Html.ActionLink(ad, "UpdateProfile", "Profile", new { area = "" }, new { @class = "nav navbar-brand", @style = "color:white;" })
+
+							var db = new MVCeTicaret.Models.Context();
+							<li>
+								<a href="@Url.Action("Wish","Shopping")">
+									İstek Listeniz
+									<span class="badge">
+										@db.Wishlists.Where(x => x.CustomerID == MVCeTicaret.Models.TemporaryUserData.UserID && x.IsActive == true).ToList().Count
+									</span>
+								</a>
+							</li>
+							<li>
+								<a href="@Url.Action("Cart","Shopping",new {id= MVCeTicaret.Models.TemporaryUserData.UserID})">
+									Sepetiniz
+									<span class="badge">
+										@db.OrderDetails.Where(x => x.CustomerID == MVCeTicaret.Models.TemporaryUserData.UserID && x.IsCompleted == false).ToList().Count
+									</span>
+								</a>
+							</li>
+						}
+					}
+				</ul>
+
+			</div>
+
+			<button onclick="topFunction()" id="myBtn" title="Go to top"><span class="glyphicon glyphicon-menu-up"></span></button>
+		</div>
+	</div>
+
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>&copy; @DateTime.Now.Year - Made By Sevgi AKTEN</p>
+		</footer>
+	</div>
+	<script src="~/scripts/jquery-3.3.1.min.js"></script>
+	<script src="~/Scripts/bootstrap.min.js"></script>
+	@RenderSection("scripts",false)
+</body>
+</html>

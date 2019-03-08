@@ -1,0 +1,76 @@
+﻿
+@{
+	ViewBag.Title = "Index";
+}
+<h2>Sizin İçin Seçtiklerimiz</h2>
+
+<div class="container">
+	<div class="row" style="margin-top:50px;">
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active">
+				<a href="#kadin" aria-controls="kadin" role="tab" data-toggle="tab">Kadın Kol Çantaları</a>
+			</li>
+			<li role="presentation">
+				<a href="#laptop" aria-controls="laptop" role="tab" data-toggle="tab">Laptop Sırt Çantaları</a>
+			</li>
+			<li role="presentation">
+				<a href="#spor" aria-controls="spor" role="tab" data-toggle="tab">Spor Sırt Çantaları</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane fade in active" id="kadin">
+				@{
+					foreach (var item in ViewData["Kadin"] as IEnumerable<MVCeTicaret.Models.Product>)
+					{
+						<div class="col-md-3">
+							<div class="thumbnail">
+								<img src="@Url.Content(item.ImageUrl)" alt="@Url.Content(item.AltText)" />
+								<div class="caption">
+									<h3 style="height:70px;">@item.Name - @string.Format("{0:C2}", item.UnitPrice)</h3>
+									<p style="height:60px;overflow:auto">@item.ShortDescription	</p>
+									<p>@Html.ActionLink("Ürün Detayı", "ProductDetail", "Product", new { id = item.ProductID }, new { @class = "btn btn-warning form-control" })</p>
+								</div>
+							</div>
+						</div>
+					}
+				}
+			</div>
+			<div role="tabpanel" class="tab-pane fade" id="laptop">
+				@{
+					foreach (var item in ViewData["Laptop"] as IEnumerable<MVCeTicaret.Models.Product>)
+					{
+						<div class="col-md-3">
+							<div class="thumbnail">
+								<img src="@Url.Content(item.ImageUrl)" alt="@Url.Content(item.AltText)" />
+								<div class="caption">
+									<h3 style="height:70px;">@item.Name - @string.Format("{0:C2}", item.UnitPrice)</h3>
+									<p style="height:60px;overflow:auto">@item.ShortDescription	</p>
+									<p>@Html.ActionLink("Ürün Detayı", "ProductDetail", "Product", new { id = item.ProductID }, new { @class = "btn btn-warning form-control" })</p>
+								</div>
+							</div>
+						</div>
+					}
+				}
+			</div>
+			<div role="tabpanel" class="tab-pane fade" id="spor">
+				@{
+					foreach (var item in ViewData["Spor"] as IEnumerable<MVCeTicaret.Models.Product>)
+					{
+						<div class="col-md-3">
+							<div class="thumbnail">
+								<img src="@Url.Content(item.ImageUrl)" alt="@Url.Content(item.AltText)" />
+								<div class="caption">
+									<h3 style="height:70px;">@item.Name - @string.Format("{0:C2}", item.UnitPrice)</h3>
+									<p style="height:60px;overflow:auto">@item.ShortDescription	</p>
+									<p>@Html.ActionLink("Ürün Detayı", "ProductDetail", "Product", new { id = item.ProductID }, new { @class = "btn btn-warning form-control" })</p>
+								</div>
+							</div>
+						</div>
+					}
+				}
+			</div>
+		</div>
+
+	</div>
+</div>
+
